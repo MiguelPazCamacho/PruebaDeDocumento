@@ -36,10 +36,14 @@ public class RobotMap {
   public static TalonSRX mn_elevador_l;
   public static TalonSRX mn_elevador_r;
 
-  public static TalonSRX mn_chasis_fl;
-  public static TalonSRX mn_chasis_bl;
-  public static TalonSRX mn_chasis_fr;
-  public static TalonSRX mn_chasis_br;
+ 
+
+  TalonSRX mn_chasis_fl= new TalonSRX(id_mn_chasis_fl);
+  TalonSRX mn_chasis_bl= new TalonSRX(id_mn_chasis_bl);
+  TalonSRX mn_chasis_fr= new TalonSRX(id_mn_chasis_fr);
+  TalonSRX mn_chasis_br= new TalonSRX(id_mn_chasis_br);
+
+
 
 
   public static void init(){
@@ -59,22 +63,22 @@ public class RobotMap {
 */
     //Chasis
     //chasis lado izquierdo
-    TalonSRX mn_chasis_fl= new TalonSRX(id_mn_chasis_fl);
+   
     mn_chasis_fl.setNeutralMode(NeutralMode.Brake);
     mn_chasis_fl.set(ControlMode.PercentOutput,0);
 
-    TalonSRX mn_chasis_bl= new TalonSRX(id_mn_chasis_bl);
+    
     mn_chasis_bl.setNeutralMode(NeutralMode.Brake);
     mn_chasis_bl.set(ControlMode.PercentOutput,0);
     mn_chasis_bl.follow(mn_chasis_fl);
     
     //chasis lado derecho
-    TalonSRX mn_chasis_fr= new TalonSRX(id_mn_chasis_fr);
+    
     mn_chasis_fr.setNeutralMode(NeutralMode.Brake);
     mn_chasis_fr.set(ControlMode.PercentOutput,0);
     mn_chasis_fr.setInverted(true);
 
-    TalonSRX mn_chasis_br= new TalonSRX(id_mn_chasis_br);
+    
     mn_chasis_br.setNeutralMode(NeutralMode.Brake);
     mn_chasis_br.set(ControlMode.PercentOutput,0);
     mn_chasis_br.setInverted(true);
