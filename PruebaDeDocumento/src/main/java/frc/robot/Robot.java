@@ -41,14 +41,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    System.out.println("esta viiiiiivooo!!");
     RobotMap.init();
-    System.out.println("esta viiiiiivooo2!!");
     robot_maindrive= new Robot_Chasis();
     robot_Elevador= new Robot_Elevador();
-    System.out.println("esta viiiiiivooo!!3");
     m_oi = new OI();
-    System.out.println("esta viiiiiivooo!!4");
    
    // m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
@@ -124,11 +120,9 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     //Robot_Maindrive= new Robot_Maindrive();
-    System.out.println("esta viiiiiivooo!!5");
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    System.out.println("esta viiiiiivooo!!6");
   }
 
   /**
