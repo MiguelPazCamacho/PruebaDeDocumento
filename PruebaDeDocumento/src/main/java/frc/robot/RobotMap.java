@@ -12,6 +12,9 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
 
@@ -32,15 +35,20 @@ public class RobotMap {
   private static final int id_mn_chasis_fr= 3;
   private static final int id_mn_chasis_br= 4;
 
+  private static final int id_motor_pid = 6;
+
   
 
-  public static TalonSRX mn_elevador_l;
-  public static TalonSRX mn_elevador_r;
-
+  
+  
   public static TalonSRX mn_chasis_fl =new TalonSRX(id_mn_chasis_fl);
   public static TalonSRX mn_chasis_bl = new TalonSRX(id_mn_chasis_bl);
   public static TalonSRX mn_chasis_fr = new TalonSRX(id_mn_chasis_fr);
   public static TalonSRX mn_chasis_br = new TalonSRX(id_mn_chasis_br);
+
+  public static CANSparkMax motor_pid= new CANSparkMax(id_motor_pid, MotorType.kBrushless) ;
+
+
 
   public static void init(){
 /*
@@ -57,32 +65,30 @@ public class RobotMap {
     mn_elevador_r.setInverted(true);
     mn_elevador_r.follow(mn_elevador_l);
 */
+
+    motor_pid.setIdleMode(IdleMode.kCoast);
+
     //Chasis
     //chasis lado izquierdo
-   
-     //Chasis
-    //chasis lado izquierdo
-    TalonSRX mn_chasis_fl= new TalonSRX(id_mn_chasis_fl);
+    
     mn_chasis_fl.setNeutralMode(NeutralMode.Brake);
     mn_chasis_fl.set(ControlMode.PercentOutput,0);
 
-    TalonSRX mn_chasis_bl= new TalonSRX(id_mn_chasis_bl);
+    
     mn_chasis_bl.setNeutralMode(NeutralMode.Brake);
     mn_chasis_bl.set(ControlMode.PercentOutput,0);
     mn_chasis_bl.follow(mn_chasis_fl);
     
     //chasis lado derecho
-    TalonSRX mn_chasis_fr= new TalonSRX(id_mn_chasis_fr);
     mn_chasis_fr.setNeutralMode(NeutralMode.Brake);
     mn_chasis_fr.set(ControlMode.PercentOutput,0);
     mn_chasis_fr.setInverted(true);
 
-    TalonSRX mn_chasis_br= new TalonSRX(id_mn_chasis_br);
+    
     mn_chasis_br.setNeutralMode(NeutralMode.Brake);
     mn_chasis_br.set(ControlMode.PercentOutput,0);
     mn_chasis_br.follow(mn_chasis_fr);
     mn_chasis_br.setInverted(true);
-
 
   }
 

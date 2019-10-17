@@ -18,7 +18,7 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Robot_Chasis extends Subsystem {
-
+  
   //Estos dos motores son los motores master de cada lado
   TalonSRX motor_r,motor_l;
   //Las primeras tres variables de poder son las que recibimos del Joystick y
@@ -41,11 +41,6 @@ public Robot_Chasis (){
   }
 
   public static void Robot_maindrive(){
-
-    /*Robot.m_oi.stick.getRawAxis(5);
-    RobotMap.mn_chasis_fr.set(ControlMode.PercentOutput,.25);
-    RobotMap.mn_chasis_fl.set(ControlMode.PercentOutput,.25);
-*/
   }
 
   public void Robot_maindrive_stop(){
@@ -117,6 +112,10 @@ public Robot_Chasis (){
     motor_l.set(ControlMode.PercentOutput, Power_Chasis_L);
     motor_r.set(ControlMode.PercentOutput, Power_Chasis_R);
   
+
+  
+  
+    
   /* código para mover chasis tanque convencional  
   power_l = -Robot.m_oi.stick.getRawAxis(1);
     power_r = -Robot.m_oi.stick.getRawAxis(5);

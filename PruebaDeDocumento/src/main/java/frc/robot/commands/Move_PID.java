@@ -9,46 +9,43 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.Robot_Elevador;
 
-public class Robot_elevador_subir extends Command {
-  public Robot_elevador_subir() {
+public class Move_PID extends Command {
+  public Move_PID() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.robot_Elevador);
+    requires(Robot.move_pid);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-   Robot.robot_Elevador.subir();
+  Robot.move_pid.Main_move();
+  Robot.move_pid.Mover_A(50); 
 
 
-  }
+}
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    //timers,sensores
     return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.robot_Elevador.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-  end();
+    end();
   }
 }

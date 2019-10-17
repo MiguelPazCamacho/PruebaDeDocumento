@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.Move_PID;
 import frc.robot.commands.Robot_Maindrive;
 import frc.robot.subsystems.Robot_Chasis;
 import frc.robot.subsystems.Robot_Elevador;
@@ -28,12 +29,14 @@ import frc.robot.subsystems.Robot_Elevador;
 public class Robot extends TimedRobot {
   
   public static OI m_oi;
-  public static Robot_Chasis robot_maindrive;
+  public static Robot_Chasis robot_chasis;
   public static Robot_Elevador robot_Elevador;
+  public static Robot_Elevador move_pid;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-  //Command Robot_Maindrive;
+  Command Robot_maindrive;
+  Command move_elevador_comando;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -42,10 +45,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     RobotMap.init();
-    robot_maindrive= new Robot_Chasis();
-    robot_Elevador= new Robot_Elevador();
+    move_pid= new Robot_Elevador();
+    robot_chasis= new Robot_Chasis();
     m_oi = new OI();
-   
+    Robot_maindrive=new Robot_Maindrive();
+    move_elevador_comando= new Move_PID();
    // m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
@@ -120,6 +124,8 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     //Robot_Maindrive= new Robot_Maindrive();
+    Robot_maindrive.start();
+    move_elevador_comando.start();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -131,7 +137,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    //Robot_Maindrive.start();
+   
     
   }
 

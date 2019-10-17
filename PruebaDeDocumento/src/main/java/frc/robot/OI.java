@@ -10,8 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.commands.Move_PID;
 import frc.robot.commands.Robot_Maindrive;
-import frc.robot.commands.Robot_elevador_subir;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -20,6 +21,7 @@ import frc.robot.commands.Robot_elevador_subir;
 public class OI {
 
   public Joystick stick;
+  public Joystick stk_sub;
   public Button ButtonA;
   public Button ButtonB;
   public Button ButtonX;
@@ -28,12 +30,15 @@ public class OI {
   
   public OI(){
     stick = new Joystick(0);
+    stk_sub = new Joystick(1);
+    
     ButtonA = new JoystickButton(stick, 1);
     ButtonB = new JoystickButton(stick, 2);
     ButtonX = new JoystickButton(stick, 3);
     ButtonY = new JoystickButton(stick, 4);
 
-  ButtonA.whenPressed(new Robot_Maindrive());
+  ButtonA.whenPressed(new Move_PID());
+  
 }
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a
