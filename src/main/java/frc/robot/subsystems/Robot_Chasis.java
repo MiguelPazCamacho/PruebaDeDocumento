@@ -18,7 +18,7 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Robot_Chasis extends Subsystem {
-  
+
   //Estos dos motores son los motores master de cada lado
   TalonSRX motor_r,motor_l;
   //Las primeras tres variables de poder son las que recibimos del Joystick y
@@ -28,6 +28,19 @@ public class Robot_Chasis extends Subsystem {
   //Estas variables son las que va a recibir el motor al final, esto depende de la velocidad y
   //la rotación que hayamos implicado.
   double Power_Chasis_L, Power_Chasis_R;
+
+  private double power;
+	private double distance;
+	/////para el pid/////////////
+	private double integral_val=0;
+	private double pre_input = 0;
+	private final double MAX_INTEGRAL_VAL = 0.3;
+	private final double MIN_INTEGRAL_VAL = -0.3;
+	private final double MAX_PID_VAL = 0.5;
+  private final double MIN_PID_VAL = -0.5;
+  private final double kp=.0025, ki=0, kd=0;
+	/////////////////////////////
+	
 
 public Robot_Chasis (){
   motor_l=RobotMap.mn_chasis_fl;
@@ -42,7 +55,111 @@ public Robot_Chasis (){
 
   public static void Robot_maindrive(){
   }
+  public static void Avanzar(){
+    
+  }
+  public double PID_fun(double setpoint,double actual_point,double kp,double ki,double kd){
+    double output_val = 0;  //la salida
+      double dt = 0.1;  //tiempo que tarda entre medidas
+      double epsilon = 2;  //tolerancia
+      
+    //para tener un pid variable a cierto rango
+    double kp2 = kp*3;
+    double kd2 = kd*3;
+      double range_tol = 10;
+      
+      //obtiene el error
+      double error = setpoint - actual_point;
+      if(Math.abs(error) <= epsilon){
+        error = 0;
+        integral_val=0;  //resetea
+        pre_input=0; //resetea
+        return(0);
+      }else{
+        ///calcula la integral
+        //considerando rectangulos pequenos donde dt es lo ancho y el error lo largo
+        integral_val=integral_val + (error*dt);  //el area al graficar la variable contra tiempo(y se suma con lo que ya hay)
+        ////para limitar la integral
+        if(integral_val> (MAX_INTEGRAL_VAL)){
+          integral_val = (MAX_INTEGRAL_VAL);}
+        if(integral_val< (MIN_INTEGRAL_VAL)){
+          integral_val = (MIN_INTEGRAL_VAL);}
+      }
+               
+      //calcula la derivada
+      double derivative_val = (actual_point - pre_input)/dt;  //la funcion dx/dt donde dx es la diferencia entre el ultimo error y el nuevo
 
+      if( Math.abs(error)>range_tol){   //si esta muy lejos
+        //calculates the output
+        output_val = (kp2*error) + (ki*integral_val) - (kd2*derivative_val);
+      }else{  //si esta muy cerca
+        //calculates the output
+        output_val = (kp*error) + (ki*integral_val) - (kd*derivative_val);
+      }
+     
+      //Saturation filter, para asegurar que no pase los valores maximos ni minimos
+      //sirve como una rampa tambien para evitar cambios bruscos
+      if(output_val > MAX_PID_VAL){output_val=MAX_PID_VAL;}
+      if(output_val < MIN_PID_VAL){output_val=MIN_PID_VAL;}
+
+      //update error, guardando el nuevo error que sera el viejo
+      pre_input =actual_point;
+
+      return(output_val); ///regresa el rewsultado del pid
+  }
+
+  protected void DriveMove(double Z3,double translationX){
+		double SENSIBILITY = 0.5,
+		SENSIBILITY2 = 0.7,
+		Left_Speed=0,
+		Right_Speed=0;
+		Z3 = (Z3 * -1);
+		
+		///ecuacion del drive
+    	if((Z3 > 0) || (Z3 < 0)){
+    		if(translationX>SENSIBILITY) {
+    			translationX=SENSIBILITY;
+    		}
+    		if(translationX<-SENSIBILITY) {
+    			translationX=-SENSIBILITY;
+    		}
+    		Left_Speed = (Z3 + (translationX));
+    		Right_Speed =(Z3 + (translationX));
+    	}else{ //giros rapidos
+    		if(translationX>SENSIBILITY2) {
+    			translationX=SENSIBILITY2;
+    		}
+    		if(translationX<-SENSIBILITY2) {
+    			translationX=-SENSIBILITY2;
+    		}
+    		Left_Speed = translationX;
+        	Right_Speed = -translationX;
+    	}
+    	
+    	///por si se pasa (seguridad)
+    	if(Left_Speed >1){Left_Speed=1;}
+    	if(Right_Speed >1){Right_Speed=1;} 
+    	if(Left_Speed <-1){Left_Speed=-1;}
+    	if(Right_Speed <-1){Right_Speed=-1;} 
+		
+		RobotMap.mn_chasis_fl.set(ControlMode.PercentOutput,Left_Speed);
+		RobotMap.mn_chasis_fr.set(ControlMode.PercentOutput,Right_Speed);
+		RobotMap.mn_chasis_bl.set(ControlMode.PercentOutput,Left_Speed);
+		RobotMap.mn_chasis_br.set(ControlMode.PercentOutput,Right_Speed);
+		
+	//	System.out.println(Left_Speed +"---"+Right_Speed);
+	//	System.out.println(RobotMap.left_enc.getDistance() + RobotMap.right_enc.getDistance());
+	
+		System.out.println(Left_Speed +"---"+Right_Speed);
+		//System.out.println("angulo="+ Robot_Heading.ahrs.getAngle());
+
+		
+	}
+
+  public void Mover_Chasis_Distancia(double setpoint){
+    double actual_point= RobotMap.Enc_chasis.getDistance();
+    PID_fun(setpoint, actual_point , kp, ki, kd);
+  }
   public void Robot_maindrive_stop(){
     motor_l.set(ControlMode.PercentOutput,0);
     motor_r.set(ControlMode.PercentOutput,0);

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.commands.Move_PID;
 import frc.robot.commands.Robot_Maindrive;
+import frc.robot.commands.Robot_Mover_Chasis_Distance;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -38,6 +39,7 @@ public class OI {
     ButtonY = new JoystickButton(stick, 4);
 
   ButtonA.whenPressed(new Move_PID());
+  ButtonB.whenPressed(new Robot_Mover_Chasis_Distance());
   
 }
   //// CREATING BUTTONS

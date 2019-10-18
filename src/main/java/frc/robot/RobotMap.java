@@ -16,6 +16,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Encoder;
+
 
 
 /**
@@ -26,9 +28,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  */
 public class RobotMap {
 
-  private static final int id_mn_elevador_l = 11;
-  private static final int id_mn_elevador_r = 12;
-
   private static final int id_mn_chasis_fl= 1;
   private static final int id_mn_chasis_bl= 2;
   
@@ -37,7 +36,8 @@ public class RobotMap {
 
   private static final int id_motor_pid = 6;
 
-  
+  private static final int puerto_encoder_A= 0 ;
+  private static final int puerto_encoder_B= 1 ;
 
   
   
@@ -48,9 +48,10 @@ public class RobotMap {
 
   public static CANSparkMax motor_pid= new CANSparkMax(id_motor_pid, MotorType.kBrushless) ;
 
-
+  public static Encoder Enc_chasis = new Encoder(puerto_encoder_A, puerto_encoder_B);
 
   public static void init(){
+
 /*
     //Elevador
     TalonSRX mn_elevador_l= new TalonSRX (id_mn_elevador_l);
